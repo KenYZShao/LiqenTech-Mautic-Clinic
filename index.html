@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>简单 Mautic Landing Page</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f4f4f7;margin:0;display:flex;align-items:center;justify-content:center;height:100vh}
+    .card{background:#fff;padding:24px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.06);max-width:520px;width:92%}
+    h1{margin:0 0 8px;font-size:20px}
+    p{margin:0 0 16px;color:#444}
+    .note{font-size:13px;color:#666;margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>获取我们的更新</h1>
+    <p>留下邮箱，获取最新资讯与优惠。</p>
+
+    <!-- 替换以下占位符：
+         MAUTIC_BASE_URL 例：mautic.example.com（不要加结尾斜杠）
+         FORM_ID 替换为你表单的 ID（数字或 Mautic 提供的表单标识） -->
+
+    <!-- 推荐：使用 Mautic 的 generate.js 嵌入（最简单） -->
+    <div id="mautic-form"></div>
+    <script src="https://MAUTIC_BASE_URL/form/generate.js?id=FORM_ID"></script>
+
+    <!-- 可选：如果你想用更完整的 JS 初始化，参考 README 中说明 -->
+    <div class="note">提示：在 Mautic 中复制 "JavaScript 嵌入" 或 "Standalone form" 代码并替换上面占位符。</div>
+  </div>
+</body>
+</html>
