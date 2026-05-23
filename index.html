@@ -1,32 +1,621 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>简单 Mautic Landing Page</title>
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif;background:#f4f4f7;margin:0;display:flex;align-items:center;justify-content:center;height:100vh}
-    .card{background:#fff;padding:24px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.06);max-width:520px;width:92%}
-    h1{margin:0 0 8px;font-size:20px}
-    p{margin:0 0 16px;color:#444}
-    .note{font-size:13px;color:#666;margin-top:12px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClinicFlow — GDPR-Compliant Marketing Automation for Clinics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal-50: #E1F5EE; --teal-100: #9FE1CB; --teal-200: #5DCAA5;
+    --teal-600: #0F6E56; --teal-800: #085041; --teal-900: #04342C;
+    --gray-50: #F8F7F4; --gray-100: #EFEDE8; --gray-200: #D3D1C7;
+    --gray-600: #5F5E5A; --gray-800: #2C2C2A; --white: #ffffff;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--white); color: var(--gray-800); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.93); backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-100); padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .nav-logo { font-family: var(--font-display); font-size: 1.25rem; color: var(--teal-800); letter-spacing: -0.01em; white-space: nowrap; }
+  .nav-logo span { color: var(--teal-200); }
+  .nav-right { display: flex; align-items: center; gap: 0.75rem; }
+
+  /* LANGUAGE SWITCHER */
+  .lang-switcher { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; }
+  .lang-btn { background: none; border: 2px solid transparent; border-radius: 6px; padding: 0.15rem; cursor: pointer; transition: all 0.15s; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  .lang-btn:hover { border-color: var(--teal-200); transform: scale(1.1); }
+  .lang-btn.active { border-color: var(--teal-600); background: var(--teal-50); border-radius: 6px; }
+  .lang-btn svg { width: 26px; height: 18px; border-radius: 3px; display: block; }
+
+  .nav-cta { background: var(--teal-800); color: var(--white); border: none; padding: 0.5rem 1.25rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.15s; text-decoration: none; white-space: nowrap; }
+  .nav-cta:hover { background: var(--teal-600); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 2rem 6rem; background: var(--white); position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -10%; right: -5%; width: 520px; height: 520px; background: radial-gradient(circle, var(--teal-50) 0%, transparent 70%); pointer-events: none; }
+  .hero-inner { max-width: 680px; margin: 0 auto; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--teal-50); color: var(--teal-800); padding: 0.375rem 1rem; border-radius: 100px; font-size: 0.8125rem; font-weight: 500; margin-bottom: 2rem; letter-spacing: 0.01em; }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--teal-200); border-radius: 50%; }
+  .hero h1 { font-family: var(--font-display); font-size: clamp(2.25rem, 5.5vw, 3.75rem); line-height: 1.1; color: var(--gray-800); letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .hero h1 em { font-style: italic; color: var(--teal-600); }
+  .hero p { font-size: 1.125rem; color: var(--gray-600); line-height: 1.8; max-width: 540px; margin-bottom: 2.5rem; font-weight: 300; }
+  .hero-actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--teal-800); color: var(--white); border: none; padding: 0.875rem 2rem; border-radius: 100px; font-family: var(--font-body); font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--teal-600); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,110,86,0.2); }
+  .btn-link { color: var(--gray-600); font-size: 0.9375rem; text-decoration: none; border-bottom: 1px solid var(--gray-200); padding-bottom: 1px; transition: color 0.2s, border-color 0.2s; }
+  .btn-link:hover { color: var(--teal-600); border-color: var(--teal-200); }
+  .hero-note { margin-top: 1.5rem; font-size: 0.8125rem; color: var(--gray-600); display: flex; align-items: center; gap: 0.5rem; }
+  .hero-note::before { content: '🔒'; font-size: 0.875rem; }
+
+  /* TRUST BAR */
+  .trust-bar { background: var(--gray-50); border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); padding: 1.5rem 2rem; }
+  .trust-bar-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+  .trust-item { display: flex; align-items: center; gap: 0.625rem; font-size: 0.875rem; color: var(--gray-600); font-weight: 400; }
+  .trust-icon { width: 28px; height: 28px; background: var(--teal-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; }
+
+  /* SECTIONS */
+  .section { padding: 6rem 2rem; }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-label { font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal-600); margin-bottom: 1rem; }
+  .section h2 { font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.2; color: var(--gray-800); letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+  .section-lead { font-size: 1.0625rem; color: var(--gray-600); max-width: 580px; font-weight: 300; line-height: 1.8; margin-bottom: 3rem; }
+
+  /* PAIN GRID */
+  .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+  .pain-card { background: var(--gray-50); border: 1px solid var(--gray-100); border-radius: 16px; padding: 1.75rem; }
+  .pain-card .icon { font-size: 1.5rem; margin-bottom: 1rem; }
+  .pain-card h3 { font-size: 1rem; font-weight: 500; color: var(--gray-800); margin-bottom: 0.5rem; }
+  .pain-card p { font-size: 0.9rem; color: var(--gray-600); line-height: 1.7; font-weight: 300; }
+
+  /* STEPS */
+  .steps-bg { background: var(--gray-50); border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); }
+  .steps { display: flex; flex-direction: column; gap: 0; margin-top: 2.5rem; }
+  .step { display: flex; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid var(--gray-100); }
+  .step:last-child { border-bottom: none; }
+  .step-num { width: 40px; height: 40px; border-radius: 50%; background: var(--teal-50); color: var(--teal-800); font-family: var(--font-display); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .step-content h3 { font-size: 1.0625rem; font-weight: 500; color: var(--gray-800); margin-bottom: 0.375rem; }
+  .step-content p { font-size: 0.9375rem; color: var(--gray-600); line-height: 1.7; font-weight: 300; }
+
+  /* COMPARE TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 2.5rem; font-size: 0.9rem; }
+  .compare-table th { text-align: left; padding: 0.875rem 1rem; background: var(--gray-50); border: 1px solid var(--gray-100); font-weight: 500; font-size: 0.85rem; color: var(--gray-600); }
+  .compare-table th.ours { background: var(--teal-50); color: var(--teal-800); border-color: var(--teal-100); }
+  .compare-table td { padding: 0.8rem 1rem; border: 1px solid var(--gray-100); color: var(--gray-600); vertical-align: middle; font-size: 0.875rem; }
+  .compare-table td.ours { background: #fafffe; border-color: var(--teal-50); color: var(--teal-800); font-weight: 500; }
+  .tick { color: var(--teal-200); font-weight: 600; }
+  .cross { color: var(--gray-200); }
+
+  /* TESTIMONIAL */
+  .testimonial-section { background: var(--teal-900); padding: 6rem 2rem; color: var(--white); }
+  .testimonial-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+  .testimonial-section .section-label { color: var(--teal-100); opacity: 0.8; }
+  blockquote { font-family: var(--font-display); font-size: clamp(1.375rem, 3vw, 1.875rem); line-height: 1.4; color: var(--white); letter-spacing: -0.01em; margin: 1.5rem 0; font-style: italic; }
+  .quote-author { font-size: 0.9rem; color: var(--teal-100); margin-top: 1.5rem; font-weight: 300; }
+  .quote-author strong { display: block; color: var(--white); font-weight: 500; margin-bottom: 0.25rem; font-style: normal; font-family: var(--font-body); font-size: 1rem; }
+
+  /* FORM */
+  .form-section { padding: 7rem 2rem; }
+  .form-container { max-width: 560px; margin: 0 auto; text-align: center; }
+  .form-container h2 { font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.25rem); letter-spacing: -0.02em; color: var(--gray-800); margin-bottom: 0.75rem; }
+  .form-container > p { font-size: 1rem; color: var(--gray-600); margin-bottom: 2.5rem; font-weight: 300; line-height: 1.7; }
+  .form-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: 20px; padding: 2.5rem; text-align: left; box-shadow: 0 2px 32px rgba(0,0,0,0.04); }
+  .form-group { margin-bottom: 1.25rem; }
+  label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--gray-800); margin-bottom: 0.5rem; }
+  input, select, textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-200); border-radius: 10px; font-family: var(--font-body); font-size: 0.9375rem; color: var(--gray-800); background: var(--white); transition: border-color 0.2s, box-shadow 0.2s; appearance: none; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal-200); box-shadow: 0 0 0 3px rgba(93,202,165,0.15); }
+  textarea { min-height: 90px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-submit { width: 100%; background: var(--teal-800); color: var(--white); border: none; padding: 1rem; border-radius: 100px; font-family: var(--font-body); font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: 0.75rem; transition: background 0.2s, transform 0.15s; }
+  .form-submit:hover { background: var(--teal-600); transform: translateY(-1px); }
+  .form-submit:disabled { opacity: 0.8; cursor: default; transform: none; }
+  .form-privacy { text-align: center; font-size: 0.8rem; color: var(--gray-600); margin-top: 1rem; line-height: 1.6; font-weight: 300; }
+
+  /* FOOTER */
+  footer { background: var(--gray-800); color: var(--gray-200); padding: 3rem 2rem; text-align: center; }
+  .footer-logo { font-family: var(--font-display); font-size: 1.25rem; color: var(--white); margin-bottom: 0.75rem; }
+  .footer-logo span { color: var(--teal-200); }
+  footer p { font-size: 0.85rem; line-height: 1.7; color: var(--gray-600); max-width: 480px; margin: 0 auto; font-weight: 300; }
+  .footer-links { display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--gray-600); text-decoration: none; font-size: 0.8375rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--teal-100); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+  .fade-up-1 { animation-delay: 0.1s; } .fade-up-2 { animation-delay: 0.22s; }
+  .fade-up-3 { animation-delay: 0.34s; } .fade-up-4 { animation-delay: 0.46s; }
+
+  @media (max-width: 680px) {
+    .form-row { grid-template-columns: 1fr; }
+    .trust-bar-inner { gap: 1.25rem; }
+    .step { flex-direction: column; gap: 1rem; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+    .lang-switcher { gap: 0.2rem; }
+    .lang-btn { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+    .compare-table { font-size: 0.8rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.6rem; }
+  }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>已经获取我们的更新！</h1>
-    <p>留下邮箱，获取最新资讯与优惠。</p>
 
-    <!-- 替换以下占位符：
-         MAUTIC_BASE_URL 例：mautic.example.com（不要加结尾斜杠）
-         FORM_ID 替换为你表单的 ID（数字或 Mautic 提供的表单标识） -->
-
-    <!-- 推荐：使用 Mautic 的 generate.js 嵌入（最简单） -->
-    <div id="mautic-form"></div>
-    <script src="https://MAUTIC_BASE_URL/form/generate.js?id=FORM_ID"></script>
-
-    <!-- 可选：如果你想用更完整的 JS 初始化，参考 README 中说明 -->
-    <div class="note">提示：在 Mautic 中复制 "JavaScript 嵌入" 或 "Standalone form" 代码并替换上面占位符。</div>
+<nav>
+  <div class="nav-logo">Clinic<span>Flow</span></div>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <!-- GB -->
+      <button class="lang-btn active" onclick="setLang('en')" title="English">
+        <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="36" fill="#012169"/><path d="M0,0 L60,36 M60,0 L0,36" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,36 M60,0 L0,36" stroke="#C8102E" stroke-width="4"/><path d="M30,0 V36 M0,18 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V36 M0,18 H60" stroke="#C8102E" stroke-width="6"/></svg>
+      </button>
+      <!-- DE -->
+      <button class="lang-btn" onclick="setLang('de')" title="Deutsch">
+        <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="12" y="0" fill="#000"/><rect width="60" height="12" y="12" fill="#D00"/><rect width="60" height="12" y="24" fill="#FFCE00"/></svg>
+      </button>
+      <!-- FR -->
+      <button class="lang-btn" onclick="setLang('fr')" title="Français">
+        <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="36" x="0" fill="#002395"/><rect width="20" height="36" x="20" fill="#fff"/><rect width="20" height="36" x="40" fill="#ED2939"/></svg>
+      </button>
+      <!-- IT -->
+      <button class="lang-btn" onclick="setLang('it')" title="Italiano">
+        <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="36" x="0" fill="#009246"/><rect width="20" height="36" x="20" fill="#fff"/><rect width="20" height="36" x="40" fill="#CE2B37"/></svg>
+      </button>
+      <!-- ES -->
+      <button class="lang-btn" onclick="setLang('es')" title="Español">
+        <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="36" fill="#AA151B"/><rect width="60" height="18" y="9" fill="#F1BF00"/></svg>
+      </button>
+      <!-- PL -->
+      <button class="lang-btn" onclick="setLang('pl')" title="Polski">
+        <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="18" y="0" fill="#fff"/><rect width="60" height="18" y="18" fill="#DC143C"/></svg>
+      </button>
+      <!-- CN -->
+      <button class="lang-btn" onclick="setLang('zh')" title="中文">
+        <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="36" fill="#DE2910"/><polygon points="10,4 11.8,9.5 17.5,9.5 13,12.9 14.8,18.4 10,15 5.2,18.4 7,12.9 2.5,9.5 8.2,9.5" fill="#FFDE00"/><polygon points="20,2 20.9,4.7 23.7,4.7 21.4,6.4 22.3,9.1 20,7.4 17.7,9.1 18.6,6.4 16.3,4.7 19.1,4.7" fill="#FFDE00"/><polygon points="24,7 24.9,9.7 27.7,9.7 25.4,11.4 26.3,14.1 24,12.4 21.7,14.1 22.6,11.4 20.3,9.7 23.1,9.7" fill="#FFDE00"/><polygon points="24,14 24.9,16.7 27.7,16.7 25.4,18.4 26.3,21.1 24,19.4 21.7,21.1 22.6,18.4 20.3,16.7 23.1,16.7" fill="#FFDE00"/><polygon points="20,19 20.9,21.7 23.7,21.7 21.4,23.4 22.3,26.1 20,24.4 17.7,26.1 18.6,23.4 16.3,21.7 19.1,21.7" fill="#FFDE00"/></svg>
+      </button>
+    </div>
+    <a href="#contact" class="nav-cta" data-i18n="nav_cta">免费咨询</a>
   </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge fade-up fade-up-1" data-i18n="hero_badge">专为欧洲中小型诊所设计</div>
+    <h1 class="fade-up fade-up-2" data-i18n="hero_h1">让患者<em>主动回来</em>，<br>而不是等待他们记起你</h1>
+    <p class="fade-up fade-up-3" data-i18n="hero_p">一套完全符合 GDPR 的营销自动化系统，帮助诊所自动发送复诊提醒、健康资讯和预约确认。数据存在你自己的服务器，永远不离开欧洲。</p>
+    <div class="hero-actions fade-up fade-up-4">
+      <a href="#contact" class="btn-primary" data-i18n="hero_cta">预约免费方案评估 →</a>
+      <a href="#how" class="btn-link" data-i18n="hero_link">看看如何运作</a>
+    </div>
+    <p class="hero-note fade-up fade-up-4" data-i18n="hero_note">无需信用卡 · 评估完全免费 · 48小时内回复</p>
+  </div>
+</section>
+
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item"><div class="trust-icon">🇪🇺</div><span data-i18n="trust_1">100% GDPR 合规</span></div>
+    <div class="trust-item"><div class="trust-icon">🔒</div><span data-i18n="trust_2">数据自托管，不经第三方</span></div>
+    <div class="trust-item"><div class="trust-icon">⚕️</div><span data-i18n="trust_3">医疗行业专项配置</span></div>
+    <div class="trust-item"><div class="trust-icon">🛠</div><span data-i18n="trust_4">开源技术，无月费锁定</span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label" data-i18n="prob_label">你是否遇到这些问题</div>
+    <h2 data-i18n="prob_h2">诊所每天都在流失<br>本可以留住的患者</h2>
+    <p class="section-lead" data-i18n="prob_lead">大多数患者不是因为不满意而离开，而是因为没有人在正确的时间提醒他们。</p>
+    <div class="pain-grid">
+      <div class="pain-card"><div class="icon">📋</div><h3 data-i18n="pain1_h">复诊率低</h3><p data-i18n="pain1_p">年度体检、定期复查——患者知道该来，却总是忘记，没有人主动跟进。</p></div>
+      <div class="pain-card"><div class="icon">📞</div><h3 data-i18n="pain2_h">前台负担过重</h3><p data-i18n="pain2_p">护士每天花大量时间手动打电话提醒预约，这些时间本可以用在患者护理上。</p></div>
+      <div class="pain-card"><div class="icon">📊</div><h3 data-i18n="pain3_h">不知道营销效果</h3><p data-i18n="pain3_p">发了邮件或短信，却不知道有多少人看了、有多少人预约了，无法改进。</p></div>
+      <div class="pain-card"><div class="icon">🔐</div><h3 data-i18n="pain4_h">担心数据合规</h3><p data-i18n="pain4_p">患者数据极其敏感，使用美国云服务总让人不安，GDPR 罚款风险真实存在。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section steps-bg" id="how">
+  <div class="section-inner">
+    <div class="section-label" data-i18n="how_label">我们如何帮助你</div>
+    <h2 data-i18n="how_h2">三步建立你的<br>患者自动化系统</h2>
+    <p class="section-lead" data-i18n="how_lead">我们负责所有技术部分，你只需要专注于患者。</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h3 data-i18n="step1_h">了解你的诊所需求（第1周）</h3><p data-i18n="step1_p">我们与你进行一次深度评估，了解你目前的患者流程、现有系统（预约软件、HIS）以及最迫切需要自动化的环节。不做无用功。</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h3 data-i18n="step2_h">部署与配置（第2—3周）</h3><p data-i18n="step2_p">在你的服务器（或欧洲数据中心）部署 Mautic，配置复诊提醒、预约确认、健康资讯等自动化流程，完全符合 GDPR 要求。你的数据始终在你的掌控之中。</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h3 data-i18n="step3_h">上线、培训与持续支持</h3><p data-i18n="step3_p">系统上线后，我们为你的团队提供操作培训。之后每月提供数据报告，帮助你了解哪些患者需要跟进，持续优化效果。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label" data-i18n="cmp_label">为什么选择我们</div>
+    <h2 data-i18n="cmp_h2">和其他方案比较</h2>
+    <p class="section-lead" data-i18n="cmp_lead">市面上有很多营销工具，但很少有专门为医疗机构合规需求设计的。</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width:28%" data-i18n="cmp_col0">功能</th>
+          <th class="ours" data-i18n="cmp_col1">ClinicFlow（我们）</th>
+          <th data-i18n="cmp_col2">Mailchimp / HubSpot</th>
+          <th data-i18n="cmp_col3">不做任何事</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td data-i18n="cmp_r1_f">GDPR 数据自托管</td><td class="ours"><span class="tick">✓</span> <span data-i18n="cmp_r1_us">数据在你的服务器</span></td><td><span class="cross">✗</span> <span data-i18n="cmp_r1_them">数据在美国服务器</span></td><td><span class="cross">—</span></td></tr>
+        <tr><td data-i18n="cmp_r2_f">自动复诊提醒</td><td class="ours"><span class="tick">✓</span> <span data-i18n="cmp_r2_us">按条件自动触发</span></td><td><span class="tick">✓</span> <span data-i18n="cmp_r2_them">需自行配置</span></td><td><span class="cross">✗</span> <span data-i18n="cmp_r2_none">前台手动操作</span></td></tr>
+        <tr><td data-i18n="cmp_r3_f">医疗场景专项配置</td><td class="ours"><span class="tick">✓</span> <span data-i18n="cmp_r3_us">开箱即用模板</span></td><td><span class="cross">✗</span> <span data-i18n="cmp_r3_them">需从零搭建</span></td><td><span class="cross">—</span></td></tr>
+        <tr><td data-i18n="cmp_r4_f">每月费用</td><td class="ours" data-i18n="cmp_r4_us">一次性部署 + 低维护费</td><td data-i18n="cmp_r4_them">€300–€1500+/月</td><td data-i18n="cmp_r4_none">隐形成本（患者流失）</td></tr>
+        <tr><td data-i18n="cmp_r5_f">本地语言支持</td><td class="ours"><span class="tick">✓</span> <span data-i18n="cmp_r5_us">直接沟通</span></td><td><span class="cross">✗</span> <span data-i18n="cmp_r5_them">英文客服</span></td><td><span class="cross">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="testimonial-section">
+  <div class="testimonial-inner">
+    <div class="section-label" data-i18n="testi_label">客户反馈</div>
+    <blockquote data-i18n="testi_quote">"系统上线三个月后，我们的复诊预约率提升了 34%。前台终于不用每天打电话了，患者也说感觉我们'更专业了'。"</blockquote>
+    <p class="quote-author"><strong>Dr. Siobhán Murphy</strong><span data-i18n="testi_bio">Murphy Family Practice，Cork — 全科诊所，12名员工</span></p>
+  </div>
+</section>
+
+<section class="form-section" id="contact">
+  <div class="form-container">
+    <h2 data-i18n="form_h2">预约免费方案评估</h2>
+    <p data-i18n="form_sub">告诉我们你的诊所情况，我们会在 48 小时内联系你，完全没有推销压力。</p>
+    <div class="form-card">
+      <div class="form-row">
+        <div class="form-group"><label data-i18n="f_name">你的姓名</label><input type="text" id="f-name" data-i18n-ph="ph_name" placeholder="Dr. Smith"></div>
+        <div class="form-group"><label data-i18n="f_clinic">诊所名称</label><input type="text" id="f-clinic" data-i18n-ph="ph_clinic" placeholder="Cork City Clinic"></div>
+      </div>
+      <div class="form-group"><label data-i18n="f_email">工作邮箱</label><input type="email" id="f-email" placeholder="doctor@yourclinic.ie"></div>
+      <div class="form-group">
+        <label data-i18n="f_size">诊所规模</label>
+        <select id="f-size">
+          <option value="" data-i18n="sz_pick">请选择...</option>
+          <option data-i18n="sz_1">1—3 名医生（小型诊所）</option>
+          <option data-i18n="sz_2">4—10 名医生（中型诊所）</option>
+          <option data-i18n="sz_3">10 名以上（多科室）</option>
+        </select>
+      </div>
+      <div class="form-group"><label data-i18n="f_pain">目前最想解决的问题（可选）</label><textarea id="f-pain" data-i18n-ph="ph_pain" placeholder="例如：复诊提醒太耗人力、担心 GDPR 合规..."></textarea></div>
+      <button class="form-submit" id="form-btn" onclick="handleSubmit()" data-i18n="f_submit">预约免费评估 →</button>
+      <p class="form-privacy" data-i18n="f_privacy">🔒 你的信息只用于本次咨询，绝不用于其他目的，符合 GDPR 第6条第1款。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Clinic<span>Flow</span></div>
+  <p data-i18n="footer_desc">专注于欧洲中小型医疗机构的营销自动化解决方案。基于开源 Mautic，数据主权在你。</p>
+  <div class="footer-links">
+    <a href="#" data-i18n="fl_privacy">隐私政策</a>
+    <a href="#" data-i18n="fl_dpa">数据处理协议（DPA）</a>
+    <a href="#" data-i18n="fl_about">关于我们</a>
+    <a href="#contact" data-i18n="fl_contact">联系我们</a>
+  </div>
+  <p style="margin-top:1.5rem;font-size:0.8rem;">© 2026 ClinicFlow · Cork, Ireland · Registered in Ireland</p>
+</footer>
+
+<script>
+const translations = {
+  zh: {
+    nav_cta: "免费咨询",
+    hero_badge: "专为欧洲中小型诊所设计",
+    hero_h1: "让患者<em>主动回来</em>，<br>而不是等待他们记起你",
+    hero_p: "一套完全符合 GDPR 的营销自动化系统，帮助诊所自动发送复诊提醒、健康资讯和预约确认。数据存在你自己的服务器，永远不离开欧洲。",
+    hero_cta: "预约免费方案评估 →",
+    hero_link: "看看如何运作",
+    hero_note: "无需信用卡 · 评估完全免费 · 48小时内回复",
+    trust_1: "100% GDPR 合规", trust_2: "数据自托管，不经第三方", trust_3: "医疗行业专项配置", trust_4: "开源技术，无月费锁定",
+    prob_label: "你是否遇到这些问题", prob_h2: "诊所每天都在流失<br>本可以留住的患者", prob_lead: "大多数患者不是因为不满意而离开，而是因为没有人在正确的时间提醒他们。",
+    pain1_h: "复诊率低", pain1_p: "年度体检、定期复查——患者知道该来，却总是忘记，没有人主动跟进。",
+    pain2_h: "前台负担过重", pain2_p: "护士每天花大量时间手动打电话提醒预约，这些时间本可以用在患者护理上。",
+    pain3_h: "不知道营销效果", pain3_p: "发了邮件或短信，却不知道有多少人看了、有多少人预约了，无法改进。",
+    pain4_h: "担心数据合规", pain4_p: "患者数据极其敏感，使用美国云服务总让人不安，GDPR 罚款风险真实存在。",
+    how_label: "我们如何帮助你", how_h2: "三步建立你的<br>患者自动化系统", how_lead: "我们负责所有技术部分，你只需要专注于患者。",
+    step1_h: "了解你的诊所需求（第1周）", step1_p: "我们与你进行一次深度评估，了解你目前的患者流程、现有系统（预约软件、HIS）以及最迫切需要自动化的环节。不做无用功。",
+    step2_h: "部署与配置（第2—3周）", step2_p: "在你的服务器（或欧洲数据中心）部署 Mautic，配置复诊提醒、预约确认、健康资讯等自动化流程，完全符合 GDPR 要求。",
+    step3_h: "上线、培训与持续支持", step3_p: "系统上线后，我们为你的团队提供操作培训。之后每月提供数据报告，帮助你了解哪些患者需要跟进，持续优化效果。",
+    cmp_label: "为什么选择我们", cmp_h2: "和其他方案比较", cmp_lead: "市面上有很多营销工具，但很少有专门为医疗机构合规需求设计的。",
+    cmp_col0: "功能", cmp_col1: "ClinicFlow（我们）", cmp_col2: "Mailchimp / HubSpot", cmp_col3: "不做任何事",
+    cmp_r1_f: "GDPR 数据自托管", cmp_r1_us: "数据在你的服务器", cmp_r1_them: "数据在美国服务器",
+    cmp_r2_f: "自动复诊提醒", cmp_r2_us: "按条件自动触发", cmp_r2_them: "需自行配置", cmp_r2_none: "前台手动操作",
+    cmp_r3_f: "医疗场景专项配置", cmp_r3_us: "开箱即用模板", cmp_r3_them: "需从零搭建",
+    cmp_r4_f: "每月费用", cmp_r4_us: "一次性部署 + 低维护费", cmp_r4_them: "€300–€1500+/月", cmp_r4_none: "隐形成本（患者流失）",
+    cmp_r5_f: "本地语言支持", cmp_r5_us: "直接沟通", cmp_r5_them: "仅英文客服",
+    testi_label: "客户反馈", testi_quote: '"系统上线三个月后，我们的复诊预约率提升了 34%。前台终于不用每天打电话了，患者也说感觉我们\'更专业了\'。"',
+    testi_bio: "Murphy Family Practice，Cork — 全科诊所，12名员工",
+    form_h2: "预约免费方案评估", form_sub: "告诉我们你的诊所情况，我们会在 48 小时内联系你，完全没有推销压力。",
+    f_name: "你的姓名", f_clinic: "诊所名称", f_email: "工作邮箱", f_size: "诊所规模", f_pain: "目前最想解决的问题（可选）",
+    ph_name: "Dr. Smith", ph_clinic: "Cork City Clinic", ph_pain: "例如：复诊提醒太耗人力、担心 GDPR 合规...",
+    sz_pick: "请选择...", sz_1: "1—3 名医生（小型诊所）", sz_2: "4—10 名医生（中型诊所）", sz_3: "10 名以上（多科室）",
+    f_submit: "预约免费评估 →", f_success: "✓ 已收到！我们会在48小时内联系你",
+    f_privacy: "🔒 你的信息只用于本次咨询，绝不用于其他目的，符合 GDPR 第6条第1款。",
+    f_alert: "请填写姓名、诊所名称和邮箱。",
+    footer_desc: "专注于欧洲中小型医疗机构的营销自动化解决方案。基于开源 Mautic，数据主权在你。",
+    fl_privacy: "隐私政策", fl_dpa: "数据处理协议（DPA）", fl_about: "关于我们", fl_contact: "联系我们"
+  },
+  en: {
+    nav_cta: "Free Consultation",
+    hero_badge: "Designed for small & mid-size European clinics",
+    hero_h1: "Keep patients <em>coming back</em>,<br>instead of waiting for them to remember",
+    hero_p: "A fully GDPR-compliant marketing automation system that sends automatic follow-up reminders, health newsletters, and appointment confirmations — with data stored on your own server, never leaving Europe.",
+    hero_cta: "Book a Free Assessment →",
+    hero_link: "See how it works",
+    hero_note: "No credit card · Completely free · Reply within 48 hours",
+    trust_1: "100% GDPR Compliant", trust_2: "Self-hosted, no third parties", trust_3: "Healthcare-specific setup", trust_4: "Open source, no monthly lock-in",
+    prob_label: "Do any of these sound familiar?", prob_h2: "Your clinic is losing patients<br>you could have kept", prob_lead: "Most patients don't leave because they're unhappy — they leave because no one reached out at the right moment.",
+    pain1_h: "Low return visit rate", pain1_p: "Annual check-ups, follow-up appointments — patients know they should come, but forget, and no one follows up.",
+    pain2_h: "Overloaded reception", pain2_p: "Nurses spend hours manually calling to remind patients. That time could be spent on actual patient care.",
+    pain3_h: "No visibility on marketing", pain3_p: "You send emails or texts but have no idea how many people opened them or booked an appointment.",
+    pain4_h: "Data compliance worries", pain4_p: "Patient data is extremely sensitive. US cloud services make you uneasy, and GDPR fines are a real risk.",
+    how_label: "How we help", how_h2: "Three steps to your<br>patient automation system", how_lead: "We handle all the technical work — you focus on your patients.",
+    step1_h: "Understand your clinic's needs (Week 1)", step1_p: "We conduct a deep-dive assessment of your patient workflows, existing systems (booking software, HIS), and which processes need automation most urgently.",
+    step2_h: "Deploy and configure (Weeks 2–3)", step2_p: "We deploy Mautic on your server (or a European data centre), configure follow-up reminders, appointment confirmations, and health newsletters — fully GDPR-compliant. Your data stays in your hands.",
+    step3_h: "Go live, train, and ongoing support", step3_p: "After launch, we train your team on using the system. Monthly reports show you which patients need follow-up, with continuous optimisation.",
+    cmp_label: "Why choose us", cmp_h2: "Compare your options", cmp_lead: "There are many marketing tools out there, but very few designed with healthcare compliance in mind.",
+    cmp_col0: "Feature", cmp_col1: "ClinicFlow (us)", cmp_col2: "Mailchimp / HubSpot", cmp_col3: "Do nothing",
+    cmp_r1_f: "GDPR self-hosted data", cmp_r1_us: "Data on your server", cmp_r1_them: "Data on US servers",
+    cmp_r2_f: "Automated follow-up reminders", cmp_r2_us: "Rule-based auto-trigger", cmp_r2_them: "Manual setup required", cmp_r2_none: "Manual calls only",
+    cmp_r3_f: "Healthcare-specific templates", cmp_r3_us: "Ready out of the box", cmp_r3_them: "Build from scratch",
+    cmp_r4_f: "Monthly cost", cmp_r4_us: "One-time setup + low maintenance", cmp_r4_them: "€300–€1500+/month", cmp_r4_none: "Hidden cost (patient churn)",
+    cmp_r5_f: "Local language support", cmp_r5_us: "Direct communication", cmp_r5_them: "English support only",
+    testi_label: "Client feedback", testi_quote: '"Three months after launch, our return appointment rate rose by 34%. Reception staff no longer spend hours on the phone, and patients say we feel more professional."',
+    testi_bio: "Murphy Family Practice, Cork — General practice, 12 staff",
+    form_h2: "Book your free assessment", form_sub: "Tell us about your clinic and we'll get back to you within 48 hours — no sales pressure whatsoever.",
+    f_name: "Your name", f_clinic: "Clinic name", f_email: "Work email", f_size: "Clinic size", f_pain: "What's your biggest challenge? (optional)",
+    ph_name: "Dr. Smith", ph_clinic: "Cork City Clinic", ph_pain: "e.g. follow-up reminders too manual, GDPR compliance concerns...",
+    sz_pick: "Please select...", sz_1: "1–3 doctors (small practice)", sz_2: "4–10 doctors (mid-size clinic)", sz_3: "10+ doctors (multi-department)",
+    f_submit: "Book free assessment →", f_success: "✓ Received! We'll contact you within 48 hours.",
+    f_privacy: "🔒 Your information is used only for this consultation and nothing else, in accordance with GDPR Art. 6(1).",
+    f_alert: "Please fill in your name, clinic name, and email.",
+    footer_desc: "Marketing automation for small and mid-size European healthcare practices. Built on open-source Mautic — your data, your control.",
+    fl_privacy: "Privacy Policy", fl_dpa: "Data Processing Agreement (DPA)", fl_about: "About us", fl_contact: "Contact"
+  },
+  de: {
+    nav_cta: "Kostenloses Gespräch",
+    hero_badge: "Für kleine und mittlere Arztpraxen in Europa",
+    hero_h1: "Patienten kommen <em>von selbst wieder</em>,<br>statt auf Erinnerungen zu warten",
+    hero_p: "Ein vollständig DSGVO-konformes Marketing-Automatisierungssystem, das automatisch Erinnerungen, Gesundheitsnewsletter und Terminbestätigungen versendet — mit Daten auf Ihrem eigenen Server, die Europa nie verlassen.",
+    hero_cta: "Kostenloses Assessment buchen →",
+    hero_link: "So funktioniert es",
+    hero_note: "Keine Kreditkarte · Vollständig kostenlos · Antwort innerhalb 48 Stunden",
+    trust_1: "100% DSGVO-konform", trust_2: "Self-hosted, keine Drittanbieter", trust_3: "Speziell für das Gesundheitswesen", trust_4: "Open Source, keine monatliche Bindung",
+    prob_label: "Kennen Sie das?", prob_h2: "Ihre Praxis verliert täglich<br>Patienten, die Sie hätten halten können", prob_lead: "Die meisten Patienten gehen nicht, weil sie unzufrieden sind — sondern weil niemand zum richtigen Zeitpunkt auf sie zugegangen ist.",
+    pain1_h: "Niedrige Wiedervorstellungsrate", pain1_p: "Jahresuntersuchungen, Kontrolltermine — Patienten wissen, dass sie kommen sollten, vergessen es aber, und niemand hakt nach.",
+    pain2_h: "Überlastetes Empfangspersonal", pain2_p: "Praxismitarbeiter verbringen Stunden damit, manuell Erinnerungsanrufe zu tätigen. Diese Zeit könnte für die Patientenversorgung genutzt werden.",
+    pain3_h: "Kein Überblick über Marketingwirkung", pain3_p: "Sie versenden E-Mails oder SMS, wissen aber nicht, wie viele Empfänger sie geöffnet haben oder einen Termin gebucht haben.",
+    pain4_h: "Sorgen um Datenschutz-Compliance", pain4_p: "Patientendaten sind extrem sensibel. US-Cloud-Dienste sind ein DSGVO-Risiko — und Bußgelder sind keine Theorie.",
+    how_label: "Wie wir helfen", how_h2: "Drei Schritte zu Ihrem<br>Patienten-Automatisierungssystem", how_lead: "Wir kümmern uns um die gesamte Technik — Sie konzentrieren sich auf Ihre Patienten.",
+    step1_h: "Ihre Praxisanforderungen verstehen (Woche 1)", step1_p: "Wir führen eine gründliche Analyse Ihrer Patientenabläufe, bestehenden Systeme (Terminbuchung, KIS) und der dringendsten Automatisierungsbedarfe durch.",
+    step2_h: "Einrichtung & Konfiguration (Woche 2–3)", step2_p: "Wir installieren Mautic auf Ihrem Server (oder in einem europäischen Rechenzentrum), konfigurieren Wiedervorstellungs-Erinnerungen, Terminbestätigungen und Newsletter — vollständig DSGVO-konform.",
+    step3_h: "Live-Schaltung, Schulung & laufende Unterstützung", step3_p: "Nach dem Start schulen wir Ihr Team. Monatliche Berichte zeigen, welche Patienten eine Nachverfolgung benötigen, mit kontinuierlicher Optimierung.",
+    cmp_label: "Warum uns wählen", cmp_h2: "Vergleich mit anderen Lösungen", cmp_lead: "Es gibt viele Marketing-Tools, aber nur wenige wurden speziell für die Compliance-Anforderungen im Gesundheitswesen entwickelt.",
+    cmp_col0: "Funktion", cmp_col1: "ClinicFlow (wir)", cmp_col2: "Mailchimp / HubSpot", cmp_col3: "Nichts tun",
+    cmp_r1_f: "DSGVO-konforme Datenhaltung", cmp_r1_us: "Daten auf Ihrem Server", cmp_r1_them: "Daten auf US-Servern",
+    cmp_r2_f: "Automatische Erinnerungen", cmp_r2_us: "Regelbasiert automatisch", cmp_r2_them: "Manuelle Einrichtung nötig", cmp_r2_none: "Nur manuelle Anrufe",
+    cmp_r3_f: "Praxisspezifische Vorlagen", cmp_r3_us: "Sofort einsatzbereit", cmp_r3_them: "Von Grund auf aufbauen",
+    cmp_r4_f: "Monatliche Kosten", cmp_r4_us: "Einmalige Einrichtung + geringe Wartung", cmp_r4_them: "€300–€1500+/Monat", cmp_r4_none: "Versteckte Kosten (Patientenverlust)",
+    cmp_r5_f: "Support in Ihrer Sprache", cmp_r5_us: "Direkte Kommunikation", cmp_r5_them: "Nur englischer Support",
+    testi_label: "Kundenstimme", testi_quote: '"Drei Monate nach dem Start stieg unsere Wiedervorstellungsrate um 34 %. Das Empfangspersonal telefoniert nicht mehr stundenlang, und Patienten sagen, wir wirken professioneller."',
+    testi_bio: "Murphy Family Practice, Cork — Allgemeinpraxis, 12 Mitarbeiter",
+    form_h2: "Kostenloses Assessment buchen", form_sub: "Erzählen Sie uns von Ihrer Praxis — wir melden uns innerhalb von 48 Stunden. Kein Verkaufsdruck.",
+    f_name: "Ihr Name", f_clinic: "Praxisname", f_email: "Geschäftliche E-Mail", f_size: "Praxisgröße", f_pain: "Größte Herausforderung? (optional)",
+    ph_name: "Dr. Müller", ph_clinic: "Praxis Berlin Mitte", ph_pain: "z. B. manuelle Erinnerungsanrufe, DSGVO-Bedenken...",
+    sz_pick: "Bitte wählen...", sz_1: "1–3 Ärzte (Einzelpraxis)", sz_2: "4–10 Ärzte (mittlere Praxis)", sz_3: "10+ Ärzte (Klinik / MVZ)",
+    f_submit: "Kostenloses Assessment buchen →", f_success: "✓ Erhalten! Wir melden uns innerhalb von 48 Stunden.",
+    f_privacy: "🔒 Ihre Daten werden ausschließlich für diese Beratung verwendet, gemäß DSGVO Art. 6(1).",
+    f_alert: "Bitte Name, Praxisname und E-Mail angeben.",
+    footer_desc: "Marketing-Automatisierung für kleine und mittlere Arztpraxen in Europa. Basierend auf Open-Source Mautic — Ihre Daten, Ihre Kontrolle.",
+    fl_privacy: "Datenschutzerklärung", fl_dpa: "Auftragsverarbeitungsvertrag (AVV)", fl_about: "Über uns", fl_contact: "Kontakt"
+  },
+  fr: {
+    nav_cta: "Consultation gratuite",
+    hero_badge: "Conçu pour les petits et moyens cabinets médicaux en Europe",
+    hero_h1: "Faites revenir vos patients <em>naturellement</em>,<br>sans attendre qu'ils s'en souviennent",
+    hero_p: "Un système d'automatisation marketing entièrement conforme au RGPD, qui envoie automatiquement des rappels, des newsletters santé et des confirmations de rendez-vous — avec des données hébergées sur votre propre serveur, qui ne quittent jamais l'Europe.",
+    hero_cta: "Réserver une évaluation gratuite →",
+    hero_link: "Voir comment ça fonctionne",
+    hero_note: "Sans carte bancaire · Totalement gratuit · Réponse sous 48 heures",
+    trust_1: "100% conforme RGPD", trust_2: "Auto-hébergé, sans tiers", trust_3: "Configuration spécifique santé", trust_4: "Open source, sans engagement mensuel",
+    prob_label: "Ces problèmes vous parlent-ils ?", prob_h2: "Votre cabinet perd chaque jour<br>des patients que vous auriez pu fidéliser", prob_lead: "La plupart des patients ne partent pas parce qu'ils sont insatisfaits — mais parce que personne ne les a contactés au bon moment.",
+    pain1_h: "Faible taux de retour", pain1_p: "Bilans annuels, visites de suivi — les patients savent qu'ils devraient revenir, mais oublient, et personne ne les relance.",
+    pain2_h: "Secrétariat surchargé", pain2_p: "Le personnel passe des heures à rappeler manuellement les patients. Ce temps pourrait être consacré aux soins.",
+    pain3_h: "Aucune visibilité marketing", pain3_p: "Vous envoyez des e-mails ou des SMS, mais ne savez pas combien ont été ouverts ni combien de rendez-vous ont été pris.",
+    pain4_h: "Inquiétudes sur la conformité des données", pain4_p: "Les données patients sont ultra-sensibles. Les services cloud américains posent un risque RGPD réel, et les amendes sont une réalité.",
+    how_label: "Comment nous vous aidons", how_h2: "Trois étapes pour votre<br>système d'automatisation patient", how_lead: "Nous gérons toute la technique — vous vous concentrez sur vos patients.",
+    step1_h: "Comprendre vos besoins (Semaine 1)", step1_p: "Nous réalisons une analyse approfondie de vos flux patients, de vos systèmes existants (logiciel de rdv, DPI) et des processus à automatiser en priorité.",
+    step2_h: "Déploiement & configuration (Semaines 2–3)", step2_p: "Nous déployons Mautic sur votre serveur (ou un data center européen), configurons les rappels, confirmations et newsletters — entièrement conformes au RGPD.",
+    step3_h: "Mise en production, formation & support continu", step3_p: "Après le lancement, nous formons votre équipe. Des rapports mensuels vous montrent quels patients nécessitent un suivi, avec optimisation continue.",
+    cmp_label: "Pourquoi nous choisir", cmp_h2: "Comparaison des solutions", cmp_lead: "Il existe de nombreux outils marketing, mais très peu conçus pour les exigences de conformité du secteur médical.",
+    cmp_col0: "Fonctionnalité", cmp_col1: "ClinicFlow (nous)", cmp_col2: "Mailchimp / HubSpot", cmp_col3: "Ne rien faire",
+    cmp_r1_f: "Hébergement RGPD auto-géré", cmp_r1_us: "Données sur votre serveur", cmp_r1_them: "Données sur serveurs US",
+    cmp_r2_f: "Rappels automatiques", cmp_r2_us: "Déclenchement automatique", cmp_r2_them: "Configuration manuelle requise", cmp_r2_none: "Appels manuels uniquement",
+    cmp_r3_f: "Modèles spécifiques santé", cmp_r3_us: "Prêts à l'emploi", cmp_r3_them: "À construire de zéro",
+    cmp_r4_f: "Coût mensuel", cmp_r4_us: "Mise en place unique + faible maintenance", cmp_r4_them: "€300–€1500+/mois", cmp_r4_none: "Coût caché (perte de patients)",
+    cmp_r5_f: "Support dans votre langue", cmp_r5_us: "Communication directe", cmp_r5_them: "Support en anglais uniquement",
+    testi_label: "Témoignage client", testi_quote: '"Trois mois après le lancement, notre taux de retour a augmenté de 34 %. L\'accueil ne passe plus ses journées au téléphone, et les patients disent que nous semblons plus professionnels."',
+    testi_bio: "Murphy Family Practice, Cork — Cabinet généraliste, 12 employés",
+    form_h2: "Réserver votre évaluation gratuite", form_sub: "Parlez-nous de votre cabinet — nous vous répondons sous 48 heures, sans pression commerciale.",
+    f_name: "Votre nom", f_clinic: "Nom du cabinet", f_email: "E-mail professionnel", f_size: "Taille du cabinet", f_pain: "Principal défi à résoudre ? (optionnel)",
+    ph_name: "Dr. Martin", ph_clinic: "Cabinet Paris 11e", ph_pain: "ex. rappels trop manuels, conformité RGPD...",
+    sz_pick: "Veuillez sélectionner...", sz_1: "1–3 médecins (petit cabinet)", sz_2: "4–10 médecins (cabinet moyen)", sz_3: "10+ médecins (polyclinique)",
+    f_submit: "Réserver l'évaluation gratuite →", f_success: "✓ Reçu ! Nous vous contacterons sous 48 heures.",
+    f_privacy: "🔒 Vos informations sont utilisées uniquement pour cette consultation, conformément au RGPD Art. 6(1).",
+    f_alert: "Veuillez renseigner votre nom, le nom du cabinet et votre e-mail.",
+    footer_desc: "Automatisation marketing pour les petits et moyens cabinets médicaux européens. Basé sur Mautic open source — vos données, votre contrôle.",
+    fl_privacy: "Politique de confidentialité", fl_dpa: "Accord de traitement des données (DPA)", fl_about: "À propos", fl_contact: "Contact"
+  },
+  it: {
+    nav_cta: "Consulenza gratuita",
+    hero_badge: "Progettato per piccoli e medi studi medici in Europa",
+    hero_h1: "Fai tornare i pazienti <em>spontaneamente</em>,<br>senza aspettare che si ricordino da soli",
+    hero_p: "Un sistema di marketing automation completamente conforme al GDPR, che invia automaticamente promemoria di follow-up, newsletter sulla salute e conferme degli appuntamenti — con dati ospitati sul tuo server, che non lasciano mai l'Europa.",
+    hero_cta: "Prenota una valutazione gratuita →",
+    hero_link: "Scopri come funziona",
+    hero_note: "Nessuna carta di credito · Completamente gratuito · Risposta entro 48 ore",
+    trust_1: "100% conforme GDPR", trust_2: "Self-hosted, nessuna terza parte", trust_3: "Configurazione per il settore sanitario", trust_4: "Open source, nessun vincolo mensile",
+    prob_label: "Ti riconosci in questi problemi?", prob_h2: "Il tuo studio perde ogni giorno<br>pazienti che avresti potuto fidelizzare", prob_lead: "La maggior parte dei pazienti non se ne va perché insoddisfatta — ma perché nessuno li ha contattati al momento giusto.",
+    pain1_h: "Basso tasso di ritorno", pain1_p: "Visite annuali, controlli periodici — i pazienti sanno di doverli fare, ma dimenticano e nessuno li ricontatta.",
+    pain2_h: "Segreteria sovraccarica", pain2_p: "Il personale trascorre ore a telefonare manualmente per i promemoria. Quel tempo potrebbe essere dedicato alla cura dei pazienti.",
+    pain3_h: "Nessuna visibilità sul marketing", pain3_p: "Invii email o SMS ma non sai quante persone li hanno aperti o hanno prenotato un appuntamento.",
+    pain4_h: "Preoccupazioni sulla conformità dei dati", pain4_p: "I dati dei pazienti sono estremamente sensibili. I servizi cloud americani sono un rischio GDPR reale.",
+    how_label: "Come ti aiutiamo", how_h2: "Tre passi per il tuo<br>sistema di automazione pazienti", how_lead: "Ci occupiamo di tutta la parte tecnica — tu ti concentri sui tuoi pazienti.",
+    step1_h: "Analisi delle esigenze (Settimana 1)", step1_p: "Conduciamo un'analisi approfondita dei tuoi flussi di lavoro, dei sistemi esistenti (software prenotazioni, cartella clinica) e delle priorità di automazione.",
+    step2_h: "Deployment e configurazione (Settimane 2–3)", step2_p: "Installiamo Mautic sul tuo server (o in un data center europeo), configuriamo promemoria di follow-up, conferme appuntamenti e newsletter — pienamente conformi al GDPR.",
+    step3_h: "Go-live, formazione e supporto continuo", step3_p: "Dopo il lancio, formiamo il tuo team. Report mensili mostrano quali pazienti necessitano di follow-up, con ottimizzazione continua.",
+    cmp_label: "Perché sceglierci", cmp_h2: "Confronta le opzioni", cmp_lead: "Esistono molti strumenti di marketing, ma pochissimi progettati per le esigenze di conformità del settore sanitario.",
+    cmp_col0: "Funzionalità", cmp_col1: "ClinicFlow (noi)", cmp_col2: "Mailchimp / HubSpot", cmp_col3: "Non fare nulla",
+    cmp_r1_f: "Dati GDPR self-hosted", cmp_r1_us: "Dati sul tuo server", cmp_r1_them: "Dati su server USA",
+    cmp_r2_f: "Promemoria automatici", cmp_r2_us: "Trigger automatico", cmp_r2_them: "Configurazione manuale", cmp_r2_none: "Solo chiamate manuali",
+    cmp_r3_f: "Template per il settore sanitario", cmp_r3_us: "Pronti all'uso", cmp_r3_them: "Da costruire da zero",
+    cmp_r4_f: "Costo mensile", cmp_r4_us: "Setup una tantum + bassa manutenzione", cmp_r4_them: "€300–€1500+/mese", cmp_r4_none: "Costi nascosti (perdita pazienti)",
+    cmp_r5_f: "Supporto nella tua lingua", cmp_r5_us: "Comunicazione diretta", cmp_r5_them: "Solo supporto in inglese",
+    testi_label: "Testimonianza cliente", testi_quote: '"Tre mesi dopo il lancio, il tasso di ritorno dei pazienti è aumentato del 34%. La segreteria non passa più ore al telefono e i pazienti dicono che sembriamo più professionali."',
+    testi_bio: "Murphy Family Practice, Cork — Studio di medicina generale, 12 dipendenti",
+    form_h2: "Prenota la tua valutazione gratuita", form_sub: "Raccontaci del tuo studio — ti risponderemo entro 48 ore, senza pressioni commerciali.",
+    f_name: "Il tuo nome", f_clinic: "Nome dello studio", f_email: "Email professionale", f_size: "Dimensione dello studio", f_pain: "Principale sfida da risolvere? (facoltativo)",
+    ph_name: "Dott. Rossi", ph_clinic: "Studio Medico Milano", ph_pain: "es. promemoria troppo manuali, conformità GDPR...",
+    sz_pick: "Seleziona...", sz_1: "1–3 medici (piccolo studio)", sz_2: "4–10 medici (studio medio)", sz_3: "10+ medici (poliambulatorio)",
+    f_submit: "Prenota valutazione gratuita →", f_success: "✓ Ricevuto! Ti contatteremo entro 48 ore.",
+    f_privacy: "🔒 Le tue informazioni vengono utilizzate solo per questa consulenza, ai sensi del GDPR Art. 6(1).",
+    f_alert: "Inserisci nome, nome dello studio ed email.",
+    footer_desc: "Marketing automation per piccoli e medi studi medici europei. Basato su Mautic open source — i tuoi dati, il tuo controllo.",
+    fl_privacy: "Informativa sulla privacy", fl_dpa: "Accordo sul trattamento dei dati (DPA)", fl_about: "Chi siamo", fl_contact: "Contatti"
+  },
+  es: {
+    nav_cta: "Consulta gratuita",
+    hero_badge: "Diseñado para clínicas pequeñas y medianas en Europa",
+    hero_h1: "Haz que los pacientes <em>vuelvan solos</em>,<br>sin esperar a que se acuerden",
+    hero_p: "Un sistema de automatización de marketing totalmente conforme con el RGPD que envía recordatorios automáticos, boletines de salud y confirmaciones de cita — con los datos alojados en tu propio servidor, que nunca salen de Europa.",
+    hero_cta: "Reservar una evaluación gratuita →",
+    hero_link: "Ver cómo funciona",
+    hero_note: "Sin tarjeta de crédito · Completamente gratuito · Respuesta en 48 horas",
+    trust_1: "100% conforme con el RGPD", trust_2: "Alojamiento propio, sin terceros", trust_3: "Configuración específica para salud", trust_4: "Open source, sin compromiso mensual",
+    prob_label: "¿Te suena alguno de estos problemas?", prob_h2: "Tu clínica pierde cada día<br>pacientes que podrías haber fidelizado", prob_lead: "La mayoría de los pacientes no se van porque estén insatisfechos — se van porque nadie los contactó en el momento adecuado.",
+    pain1_h: "Baja tasa de retorno", pain1_p: "Revisiones anuales, citas de seguimiento — los pacientes saben que deben venir, pero se olvidan y nadie hace seguimiento.",
+    pain2_h: "Recepción sobrecargada", pain2_p: "El personal pasa horas llamando manualmente para recordar citas. Ese tiempo podría dedicarse a la atención al paciente.",
+    pain3_h: "Sin visibilidad del marketing", pain3_p: "Envías correos o SMS pero no sabes cuántas personas los abrieron ni cuántas reservaron cita.",
+    pain4_h: "Preocupaciones sobre el cumplimiento de datos", pain4_p: "Los datos de los pacientes son extremadamente sensibles. Los servicios cloud americanos suponen un riesgo real de multas del RGPD.",
+    how_label: "Cómo te ayudamos", how_h2: "Tres pasos para tu<br>sistema de automatización de pacientes", how_lead: "Nos encargamos de toda la parte técnica — tú te concentras en tus pacientes.",
+    step1_h: "Entender tus necesidades (Semana 1)", step1_p: "Realizamos un análisis profundo de tus flujos de trabajo, sistemas actuales (software de citas, HIS) y los procesos que más necesitan automatización.",
+    step2_h: "Despliegue y configuración (Semanas 2–3)", step2_p: "Instalamos Mautic en tu servidor (o en un centro de datos europeo), configuramos recordatorios, confirmaciones y newsletters — totalmente conformes con el RGPD.",
+    step3_h: "Puesta en marcha, formación y soporte continuo", step3_p: "Tras el lanzamiento, formamos a tu equipo. Informes mensuales muestran qué pacientes necesitan seguimiento, con optimización continua.",
+    cmp_label: "Por qué elegirnos", cmp_h2: "Compara tus opciones", cmp_lead: "Hay muchas herramientas de marketing, pero muy pocas diseñadas teniendo en cuenta el cumplimiento normativo del sector sanitario.",
+    cmp_col0: "Característica", cmp_col1: "ClinicFlow (nosotros)", cmp_col2: "Mailchimp / HubSpot", cmp_col3: "No hacer nada",
+    cmp_r1_f: "Datos RGPD autoalojados", cmp_r1_us: "Datos en tu servidor", cmp_r1_them: "Datos en servidores de EE.UU.",
+    cmp_r2_f: "Recordatorios automáticos", cmp_r2_us: "Activación automática", cmp_r2_them: "Configuración manual", cmp_r2_none: "Solo llamadas manuales",
+    cmp_r3_f: "Plantillas para el sector sanitario", cmp_r3_us: "Listas para usar", cmp_r3_them: "Construir desde cero",
+    cmp_r4_f: "Coste mensual", cmp_r4_us: "Configuración única + bajo mantenimiento", cmp_r4_them: "€300–€1500+/mes", cmp_r4_none: "Coste oculto (pérdida de pacientes)",
+    cmp_r5_f: "Soporte en tu idioma", cmp_r5_us: "Comunicación directa", cmp_r5_them: "Solo soporte en inglés",
+    testi_label: "Testimonio de cliente", testi_quote: '"Tres meses después del lanzamiento, nuestra tasa de retorno aumentó un 34 %. La recepción ya no pasa horas al teléfono y los pacientes dicen que parecemos más profesionales."',
+    testi_bio: "Murphy Family Practice, Cork — Medicina general, 12 empleados",
+    form_h2: "Reserva tu evaluación gratuita", form_sub: "Cuéntanos sobre tu clínica — te responderemos en 48 horas, sin presión de venta.",
+    f_name: "Tu nombre", f_clinic: "Nombre de la clínica", f_email: "Correo profesional", f_size: "Tamaño de la clínica", f_pain: "Mayor reto a resolver (opcional)",
+    ph_name: "Dr. García", ph_clinic: "Clínica Madrid Centro", ph_pain: "ej. recordatorios demasiado manuales, cumplimiento RGPD...",
+    sz_pick: "Seleccionar...", sz_1: "1–3 médicos (consulta pequeña)", sz_2: "4–10 médicos (clínica mediana)", sz_3: "10+ médicos (policlínica)",
+    f_submit: "Reservar evaluación gratuita →", f_success: "✓ ¡Recibido! Te contactaremos en 48 horas.",
+    f_privacy: "🔒 Tu información se usa únicamente para esta consulta, conforme al RGPD Art. 6(1).",
+    f_alert: "Por favor, introduce tu nombre, el nombre de la clínica y tu correo.",
+    footer_desc: "Automatización de marketing para pequeñas y medianas clínicas médicas europeas. Basado en Mautic open source — tus datos, tu control.",
+    fl_privacy: "Política de privacidad", fl_dpa: "Acuerdo de tratamiento de datos (DPA)", fl_about: "Sobre nosotros", fl_contact: "Contacto"
+  },
+  pl: {
+    nav_cta: "Bezpłatna konsultacja",
+    hero_badge: "Zaprojektowane dla małych i średnich przychodni w Europie",
+    hero_h1: "Spraw, by pacjenci <em>wracali sami</em>,<br>zamiast czekać, aż sami o tym pamiętają",
+    hero_p: "W pełni zgodny z RODO system automatyzacji marketingu, który automatycznie wysyła przypomnienia o wizytach, newslettery zdrowotne i potwierdzenia terminów — z danymi przechowywanymi na własnym serwerze, które nigdy nie opuszczają Europy.",
+    hero_cta: "Zarezerwuj bezpłatną ocenę →",
+    hero_link: "Sprawdź jak to działa",
+    hero_note: "Bez karty kredytowej · Całkowicie bezpłatne · Odpowiedź w ciągu 48 godzin",
+    trust_1: "100% zgodność z RODO", trust_2: "Self-hosted, bez stron trzecich", trust_3: "Konfiguracja dla sektora medycznego", trust_4: "Open source, bez miesięcznego zobowiązania",
+    prob_label: "Czy to brzmi znajomo?", prob_h2: "Twoja przychodnia traci każdego dnia<br>pacjentów, których można było zatrzymać", prob_lead: "Większość pacjentów nie odchodzi, bo są niezadowoleni — odchodzą, bo nikt nie skontaktował się z nimi w odpowiednim momencie.",
+    pain1_h: "Niski wskaźnik powrotów", pain1_p: "Coroczne badania, wizyty kontrolne — pacjenci wiedzą, że powinni przyjść, ale zapominają, a nikt za nimi nie podąża.",
+    pain2_h: "Przeciążona recepcja", pain2_p: "Personel spędza godziny na ręcznym dzwonieniu z przypomnieniami. Ten czas mógłby być poświęcony na opiekę nad pacjentem.",
+    pain3_h: "Brak wiedzy o skuteczności marketingu", pain3_p: "Wysyłasz e-maile lub SMS-y, ale nie wiesz, ile osób je otworzyło ani ile zarezerwowało wizytę.",
+    pain4_h: "Obawy o zgodność danych", pain4_p: "Dane pacjentów są niezwykle wrażliwe. Korzystanie z usług chmurowych w USA stanowi realne ryzyko kar RODO.",
+    how_label: "Jak pomagamy", how_h2: "Trzy kroki do systemu<br>automatyzacji pacjentów", how_lead: "My zajmujemy się całą techniką — ty skupiasz się na pacjentach.",
+    step1_h: "Analiza potrzeb przychodni (Tydzień 1)", step1_p: "Przeprowadzamy szczegółową analizę procesów obsługi pacjenta, istniejących systemów (oprogramowanie do rejestracji, HIS) i najbardziej pilnych potrzeb automatyzacji.",
+    step2_h: "Wdrożenie i konfiguracja (Tygodnie 2–3)", step2_p: "Instalujemy Mautic na Twoim serwerze (lub w europejskim centrum danych), konfigurujemy przypomnienia, potwierdzenia wizyt i newslettery — w pełni zgodnie z RODO.",
+    step3_h: "Uruchomienie, szkolenie i bieżące wsparcie", step3_p: "Po uruchomieniu szkolimy Twój zespół. Miesięczne raporty pokazują, którzy pacjenci wymagają kontaktu, z ciągłą optymalizacją.",
+    cmp_label: "Dlaczego warto nas wybrać", cmp_h2: "Porównaj dostępne opcje", cmp_lead: "Istnieje wiele narzędzi marketingowych, ale bardzo mało zaprojektowanych z myślą o wymogach zgodności w sektorze ochrony zdrowia.",
+    cmp_col0: "Funkcja", cmp_col1: "ClinicFlow (my)", cmp_col2: "Mailchimp / HubSpot", cmp_col3: "Nic nie robić",
+    cmp_r1_f: "Dane RODO na własnym serwerze", cmp_r1_us: "Dane na Twoim serwerze", cmp_r1_them: "Dane na serwerach USA",
+    cmp_r2_f: "Automatyczne przypomnienia", cmp_r2_us: "Automatyczne wyzwalanie", cmp_r2_them: "Wymagana konfiguracja ręczna", cmp_r2_none: "Tylko ręczne telefony",
+    cmp_r3_f: "Szablony dla sektora medycznego", cmp_r3_us: "Gotowe do użycia", cmp_r3_them: "Budowanie od podstaw",
+    cmp_r4_f: "Miesięczny koszt", cmp_r4_us: "Jednorazowa konfiguracja + niskie utrzymanie", cmp_r4_them: "€300–€1500+/miesiąc", cmp_r4_none: "Ukryte koszty (utrata pacjentów)",
+    cmp_r5_f: "Wsparcie w Twoim języku", cmp_r5_us: "Bezpośrednia komunikacja", cmp_r5_them: "Tylko wsparcie po angielsku",
+    testi_label: "Opinia klienta", testi_quote: '"Trzy miesiące po wdrożeniu wskaźnik powrotów wzrósł o 34%. Recepcja nie spędza już godzin przy telefonie, a pacjenci mówią, że wyglądamy bardziej profesjonalnie."',
+    testi_bio: "Murphy Family Practice, Cork — Praktyka ogólna, 12 pracowników",
+    form_h2: "Zarezerwuj bezpłatną ocenę", form_sub: "Opowiedz nam o swojej przychodni — odpiszemy w ciągu 48 godzin, bez presji sprzedażowej.",
+    f_name: "Twoje imię i nazwisko", f_clinic: "Nazwa przychodni", f_email: "Służbowy e-mail", f_size: "Wielkość przychodni", f_pain: "Największe wyzwanie? (opcjonalne)",
+    ph_name: "Dr Kowalski", ph_clinic: "Przychodnia Warszawa Centrum", ph_pain: "np. zbyt ręczne przypomnienia, zgodność z RODO...",
+    sz_pick: "Wybierz...", sz_1: "1–3 lekarzy (mała przychodnia)", sz_2: "4–10 lekarzy (średnia przychodnia)", sz_3: "10+ lekarzy (poliklinika)",
+    f_submit: "Zarezerwuj bezpłatną ocenę →", f_success: "✓ Otrzymano! Skontaktujemy się w ciągu 48 godzin.",
+    f_privacy: "🔒 Twoje dane są używane wyłącznie do tej konsultacji, zgodnie z RODO Art. 6(1).",
+    f_alert: "Proszę podać imię, nazwę przychodni i e-mail.",
+    footer_desc: "Automatyzacja marketingu dla małych i średnich europejskich przychodni medycznych. Oparte na open-source Mautic — Twoje dane, Twoja kontrola.",
+    fl_privacy: "Polityka prywatności", fl_dpa: "Umowa powierzenia danych (DPA)", fl_about: "O nas", fl_contact: "Kontakt"
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  const t = translations[lang];
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+
+  const szSelect = document.getElementById('f-size');
+  if (szSelect) {
+    const opts = szSelect.querySelectorAll('option');
+    const keys = ['sz_pick', 'sz_1', 'sz_2', 'sz_3'];
+    opts.forEach((opt, i) => { if (t[keys[i]]) opt.textContent = t[keys[i]]; });
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick') === `setLang('${lang}')`);
+  });
+
+  const btn = document.getElementById('form-btn');
+  if (btn && !btn.disabled) btn.textContent = t['f_submit'];
+}
+
+function handleSubmit() {
+  const t = translations[currentLang];
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const clinic = document.getElementById('f-clinic').value.trim();
+  if (!name || !email || !clinic) { alert(t.f_alert); return; }
+  const btn = document.getElementById('form-btn');
+  btn.textContent = t.f_success;
+  btn.style.background = '#0F6E56';
+  btn.disabled = true;
+}
+
+setLang('en');
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
 </body>
 </html>
