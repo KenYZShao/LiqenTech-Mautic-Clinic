@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0F6E56">
 <title>ClinicFlow — GDPR-Compliant Marketing Automation for Clinics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -89,6 +90,32 @@
   .compare-table td.ours { background: #fafffe; border-color: var(--teal-50); color: var(--teal-800); font-weight: 500; }
   .tick { color: var(--teal-200); font-weight: 600; }
   .cross { color: var(--gray-200); }
+
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -1rem; padding: 0 1rem; }
+  .compare-table { min-width: 640px; }
+
+  @media (max-width: 900px) {
+    .hero { padding: 6rem 1.5rem 4rem; }
+    .section, .form-section, .testimonial-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .btn-primary, .btn-link { width: 100%; justify-content: center; }
+    .form-card { padding: 2rem; }
+  }
+  @media (max-width: 768px) {
+    nav { flex-wrap: wrap; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 1rem; height: auto; }
+    .nav-right { width: 100%; justify-content: space-between; }
+    .lang-switcher { width: 100%; justify-content: flex-start; flex-wrap: wrap; gap: 0.4rem; }
+    .nav-cta { width: auto; white-space: normal; padding: 0.7rem 1rem; }
+  }
+  @media (max-width: 680px) {
+    .hero { padding: 4.5rem 1rem 3rem; }
+    .section, .form-section, .testimonial-section { padding-left: 1rem; padding-right: 1rem; }
+    .form-section { padding: 4.5rem 1rem; }
+    .hero-actions { gap: 1rem; }
+    .lang-btn { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+    .compare-table { min-width: 560px; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.6rem; }
+  }
 
   /* TESTIMONIAL */
   .testimonial-section { background: var(--teal-900); padding: 6rem 2rem; color: var(--white); }
@@ -177,7 +204,7 @@
         <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="36" fill="#DE2910"/><polygon points="10,4 11.8,9.5 17.5,9.5 13,12.9 14.8,18.4 10,15 5.2,18.4 7,12.9 2.5,9.5 8.2,9.5" fill="#FFDE00"/><polygon points="20,2 20.9,4.7 23.7,4.7 21.4,6.4 22.3,9.1 20,7.4 17.7,9.1 18.6,6.4 16.3,4.7 19.1,4.7" fill="#FFDE00"/><polygon points="24,7 24.9,9.7 27.7,9.7 25.4,11.4 26.3,14.1 24,12.4 21.7,14.1 22.6,11.4 20.3,9.7 23.1,9.7" fill="#FFDE00"/><polygon points="24,14 24.9,16.7 27.7,16.7 25.4,18.4 26.3,21.1 24,19.4 21.7,21.1 22.6,18.4 20.3,16.7 23.1,16.7" fill="#FFDE00"/><polygon points="20,19 20.9,21.7 23.7,21.7 21.4,23.4 22.3,26.1 20,24.4 17.7,26.1 18.6,23.4 16.3,21.7 19.1,21.7" fill="#FFDE00"/></svg>
       </button>
     </div>
-    <a href="#contact" class="nav-cta" data-i18n="nav_cta">免费咨询</a>
+    <a href="#contact" class="nav-cta" data-i18n="nav_cta">免费咨询！</a>
   </div>
 </nav>
 
@@ -235,15 +262,16 @@
     <div class="section-label" data-i18n="cmp_label">为什么选择我们</div>
     <h2 data-i18n="cmp_h2">和其他方案比较</h2>
     <p class="section-lead" data-i18n="cmp_lead">市面上有很多营销工具，但很少有专门为医疗机构合规需求设计的。</p>
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th style="width:28%" data-i18n="cmp_col0">功能</th>
-          <th class="ours" data-i18n="cmp_col1">ClinicFlow（我们）</th>
-          <th data-i18n="cmp_col2">Mailchimp / HubSpot</th>
-          <th data-i18n="cmp_col3">不做任何事</th>
-        </tr>
-      </thead>
+    <div class="table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:28%" data-i18n="cmp_col0">功能</th>
+            <th class="ours" data-i18n="cmp_col1">ClinicFlow（我们）</th>
+            <th data-i18n="cmp_col2">Mailchimp / HubSpot</th>
+            <th data-i18n="cmp_col3">不做任何事</th>
+          </tr>
+        </thead>
       <tbody>
         <tr><td data-i18n="cmp_r1_f">GDPR 数据自托管</td><td class="ours"><span class="tick">✓</span> <span data-i18n="cmp_r1_us">数据在你的服务器</span></td><td><span class="cross">✗</span> <span data-i18n="cmp_r1_them">数据在美国服务器</span></td><td><span class="cross">—</span></td></tr>
         <tr><td data-i18n="cmp_r2_f">自动复诊提醒</td><td class="ours"><span class="tick">✓</span> <span data-i18n="cmp_r2_us">按条件自动触发</span></td><td><span class="tick">✓</span> <span data-i18n="cmp_r2_them">需自行配置</span></td><td><span class="cross">✗</span> <span data-i18n="cmp_r2_none">前台手动操作</span></td></tr>
@@ -304,7 +332,7 @@
 <script>
 const translations = {
   zh: {
-    nav_cta: "免费咨询！",
+    nav_cta: "免费咨询",
     hero_badge: "专为欧洲中小型诊所设计",
     hero_h1: "让患者<em>主动回来</em>，<br>而不是等待他们记起你",
     hero_p: "一套完全符合 GDPR 的营销自动化系统，帮助诊所自动发送复诊提醒、健康资讯和预约确认。数据存在你自己的服务器，永远不离开欧洲。",
