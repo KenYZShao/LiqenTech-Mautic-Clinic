@@ -151,6 +151,36 @@
   .footer-links a { color: var(--gray-600); text-decoration: none; font-size: 0.8375rem; transition: color 0.2s; }
   .footer-links a:hover { color: var(--teal-100); }
 
+  /* PACKAGE CARDS */
+  .package-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 2.5rem; }
+  .package-card { background: var(--white); border: 2px solid var(--gray-100); border-radius: 20px; padding: 2.25rem; text-align: center; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
+  .package-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,110,86,0.15); border-color: var(--teal-200); }
+  .package-card.highlighted { border-color: var(--teal-200); background: linear-gradient(135deg, rgba(93,202,165,0.05), rgba(15,110,86,0.02)); position: relative; }
+  .package-card.highlighted::before { content: "Recommended"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--teal-800); color: var(--white); padding: 0.375rem 1rem; border-radius: 100px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; }
+  .package-name { font-family: var(--font-display); font-size: 1.375rem; color: var(--gray-800); margin-bottom: 0.5rem; margin-top: 0.5rem; }
+  .package-desc { font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1.5rem; min-height: 40px; }
+  .feature-list { text-align: left; margin: 1.75rem 0; }
+  .feature-list li { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; font-size: 0.9375rem; color: var(--gray-600); line-height: 1.5; }
+  .feature-list li::before { content: "✓"; color: var(--teal-200); font-weight: 700; flex-shrink: 0; }
+  .package-cta { width: 100%; background: var(--teal-800); color: var(--white); border: none; padding: 0.875rem 1.5rem; border-radius: 100px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; cursor: pointer; margin-top: 0.75rem; transition: background 0.2s; text-decoration: none; display: inline-block; }
+  .package-cta:hover { background: var(--teal-600); }
+
+  /* TIMELINE / SCENARIO */
+  .scenario-timeline { display: flex; flex-direction: column; gap: 2rem; margin-top: 2.5rem; }
+  .scenario-step { display: flex; gap: 2rem; padding: 1.75rem; background: var(--gray-50); border-left: 4px solid var(--teal-200); border-radius: 12px; }
+  .scenario-step-num { width: 50px; height: 50px; border-radius: 50%; background: var(--teal-800); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.5rem; flex-shrink: 0; }
+  .scenario-step-content h3 { font-size: 1.125rem; color: var(--gray-800); margin-bottom: 0.5rem; }
+  .scenario-step-content p { font-size: 0.95rem; color: var(--gray-600); line-height: 1.7; }
+
+  /* COMPLIANCE CHECKS */
+  .compliance-checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+  .compliance-check { background: var(--gray-50); border-left: 4px solid var(--teal-200); border-radius: 12px; padding: 1.5rem; }
+  .compliance-check-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .compliance-check h3 { font-size: 1.0625rem; color: var(--gray-800); margin-bottom: 0.5rem; }
+  .compliance-check p { font-size: 0.9rem; color: var(--gray-600); line-height: 1.7; }
+  .compliance-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--teal-50); color: var(--teal-800); padding: 0.375rem 0.875rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin-top: 0.75rem; }
+  .compliance-badge::before { content: "✓"; font-weight: 700; }
+
   /* ANIMATIONS */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
   .fade-up { animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both; }
@@ -166,6 +196,14 @@
     .lang-btn { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
     .compare-table { font-size: 0.8rem; }
     .compare-table th, .compare-table td { padding: 0.6rem 0.6rem; }
+    .package-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .package-card { padding: 1.75rem; }
+    .package-card.highlighted::before { font-size: 0.7rem; padding: 0.3rem 0.75rem; }
+    .scenario-timeline { gap: 1.5rem; }
+    .scenario-step { flex-direction: column; gap: 1.25rem; padding: 1.25rem; }
+    .scenario-step-num { width: 40px; height: 40px; font-size: 1.25rem; }
+    .compliance-checks { grid-template-columns: 1fr; gap: 1rem; }
+    .compliance-check { padding: 1.25rem; }
   }
 </style>
 </head>
@@ -233,15 +271,47 @@
 <section class="section">
   <div class="section-inner">
     <div class="section-label" data-i18n="feat_label">Core automation features</div>
-    <h2 data-i18n="feat_h2">ClinicFlow gives clinics these automation capabilities</h2>
-    <p class="section-lead" data-i18n="feat_lead">From appointment reminders to self-hosted GDPR control, turn patient follow-up into a measurable workflow.</p>
-    <div class="pain-grid">
-      <div class="pain-card"><div class="icon">⏰</div><h3 data-i18n="feat1_h">Automated reminders</h3><p data-i18n="feat1_p">Send follow-up emails and SMS automatically based on treatment dates, appointment windows, and patient segments.</p></div>
-      <div class="pain-card"><div class="icon">✅</div><h3 data-i18n="feat2_h">Appointment confirmations</h3><p data-i18n="feat2_p">Confirm, cancel, and no-show messages reduce no-shows and free up front desk time.</p></div>
-      <div class="pain-card"><div class="icon">🎯</div><h3 data-i18n="feat3_h">Segmented patient journeys</h3><p data-i18n="feat3_p">Group patients by condition, age, visit type or consent status for more relevant communication.</p></div>
-      <div class="pain-card"><div class="icon">💌</div><h3 data-i18n="feat4_h">Health newsletters</h3><p data-i18n="feat4_p">Deliver GDPR-safe educational content and clinic updates without manual work.</p></div>
-      <div class="pain-card"><div class="icon">📈</div><h3 data-i18n="feat5_h">Lead scoring & triggers</h3><p data-i18n="feat5_p">Assign scores from patient behavior and trigger follow-up actions automatically.</p></div>
-      <div class="pain-card"><div class="icon">🔐</div><h3 data-i18n="feat6_h">Self-hosted data control</h3><p data-i18n="feat6_p">Run Mautic on your own European server so patient data never leaves your jurisdiction.</p></div>
+    <h2 data-i18n="feat_h2">Choose the right ClinicFlow plan for your clinic</h2>
+    <p class="section-lead" data-i18n="feat_lead">All plans include GDPR compliance and self-hosted data on your European server.</p>
+    <div class="package-grid">
+      <div class="package-card">
+        <div class="icon" style="font-size:2.5rem;margin-bottom:0.75rem;">⏰</div>
+        <div class="package-name" data-i18n="pkg_starter">Starter</div>
+        <div class="package-desc" data-i18n="pkg_starter_desc">Perfect for clinics just getting started with automation</div>
+        <ul class="feature-list">
+          <li data-i18n="pkg_f1">Automated reminder emails</li>
+          <li data-i18n="pkg_f2">Appointment confirmations</li>
+          <li data-i18n="pkg_f3">Basic patient segments</li>
+        </ul>
+        <a href="#contact" class="package-cta" data-i18n="pkg_cta">Learn more →</a>
+      </div>
+      <div class="package-card highlighted">
+        <div class="icon" style="font-size:2.5rem;margin-bottom:0.75rem;">✅</div>
+        <div class="package-name" data-i18n="pkg_standard">Standard</div>
+        <div class="package-desc" data-i18n="pkg_standard_desc">Most popular: full automation for growing clinics</div>
+        <ul class="feature-list">
+          <li data-i18n="pkg_f1">Automated reminder emails</li>
+          <li data-i18n="pkg_f2">SMS & appointment confirmations</li>
+          <li data-i18n="pkg_f4">Advanced patient segmentation</li>
+          <li data-i18n="pkg_f5">Health education newsletters</li>
+          <li data-i18n="pkg_f6">Monthly performance reports</li>
+        </ul>
+        <a href="#contact" class="package-cta" data-i18n="pkg_cta">Learn more →</a>
+      </div>
+      <div class="package-card">
+        <div class="icon" style="font-size:2.5rem;margin-bottom:0.75rem;">🔐</div>
+        <div class="package-name" data-i18n="pkg_premium">Premium</div>
+        <div class="package-desc" data-i18n="pkg_premium_desc">Enterprise: full customization & dedicated support</div>
+        <ul class="feature-list">
+          <li data-i18n="pkg_f1">Automated reminder emails</li>
+          <li data-i18n="pkg_f2">SMS & push notifications</li>
+          <li data-i18n="pkg_f7">Lead scoring & behavior triggers</li>
+          <li data-i18n="pkg_f8">Custom workflow design</li>
+          <li data-i18n="pkg_f9">HIS/EHR integration support</li>
+          <li data-i18n="pkg_f10">Dedicated account manager</li>
+        </ul>
+        <a href="#contact" class="package-cta" data-i18n="pkg_cta">Learn more →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -263,12 +333,30 @@
 <section class="section steps-bg">
   <div class="section-inner">
     <div class="section-label" data-i18n="scenario_label">Real clinic use cases</div>
-    <h2 data-i18n="scenario_h2">Common automation scenarios for clinics</h2>
-    <p class="section-lead" data-i18n="scenario_lead">These are the most valuable Mautic workflows we build for healthcare practices.</p>
-    <div class="pain-grid">
-      <div class="pain-card"><div class="icon">🩺</div><h3 data-i18n="scenario1_h">Chronic care follow-up</h3><p data-i18n="scenario1_p">Patients with diabetes, hypertension, or pregnancy receive scheduled care reminders and education.</p></div>
-      <div class="pain-card"><div class="icon">🆕</div><h3 data-i18n="scenario2_h">New patient onboarding</h3><p data-i18n="scenario2_p">Automatically send welcome messages, preparation instructions and follow-up guidance after the first visit.</p></div>
-      <div class="pain-card"><div class="icon">📅</div><h3 data-i18n="scenario3_h">No-show & cancellation flow</h3><p data-i18n="scenario3_p">Automatically handle missed appointments, cancellations and rescheduling follow up.</p></div>
+    <h2 data-i18n="scenario_h2">How ClinicFlow works in your clinic</h2>
+    <p class="section-lead" data-i18n="scenario_lead">These automation workflows run automatically in the background once configured.</p>
+    <div class="scenario-timeline">
+      <div class="scenario-step">
+        <div class="scenario-step-num">1</div>
+        <div class="scenario-step-content">
+          <h3 data-i18n="scenario1_h">Chronic care reminders</h3>
+          <p data-i18n="scenario1_p">Patients with diabetes, hypertension, or pregnancy automatically receive follow-up reminders on a schedule you define. They get personalized health tips matched to their condition.</p>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <div class="scenario-step-num">2</div>
+        <div class="scenario-step-content">
+          <h3 data-i18n="scenario2_h">New patient welcome flow</h3>
+          <p data-i18n="scenario2_p">Right after the first visit, new patients receive a welcome email with aftercare instructions, next steps, and a request for feedback. No manual follow-up needed.</p>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <div class="scenario-step-num">3</div>
+        <div class="scenario-step-content">
+          <h3 data-i18n="scenario3_h">No-show recovery</h3>
+          <p data-i18n="scenario3_p">When a patient misses or cancels an appointment, they're automatically enrolled in a re-booking flow with gentle reminders to reschedule.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -276,12 +364,27 @@
 <section class="section">
   <div class="section-inner">
     <div class="section-label" data-i18n="gdpr_label">GDPR self-hosting advantages</div>
-    <h2 data-i18n="gdpr_h2">Keep patient data fully under your control</h2>
-    <p class="section-lead" data-i18n="gdpr_lead">Mautic is both a marketing tool and a compliance tool. We help you build local workflows that are audit-ready.</p>
-    <div class="pain-grid">
-      <div class="pain-card"><div class="icon">📁</div><h3 data-i18n="gdpr1_h">Local data ownership</h3><p data-i18n="gdpr1_p">Patient information stays on your European server and never goes to U.S. or third-party cloud providers.</p></div>
-      <div class="pain-card"><div class="icon">🧾</div><h3 data-i18n="gdpr2_h">Consent & audit records</h3><p data-i18n="gdpr2_p">Supports consent logging, withdrawal tracking and GDPR-required access logs.</p></div>
-      <div class="pain-card"><div class="icon">🛡️</div><h3 data-i18n="gdpr3_h">DPA-ready security</h3><p data-i18n="gdpr3_p">We deploy with DPA compatibility, HTTPS, access controls and backup strategy.</p></div>
+    <h2 data-i18n="gdpr_h2">Your data security commitments</h2>
+    <p class="section-lead" data-i18n="gdpr_lead">Mautic is both a marketing tool and a compliance tool. We build audit-ready systems that keep patient data safe.</p>
+    <div class="compliance-checks">
+      <div class="compliance-check">
+        <div class="compliance-check-icon">📁</div>
+        <h3 data-i18n="gdpr1_h">Local data ownership</h3>
+        <p data-i18n="gdpr1_p">Patient information stays on your European server and never goes to U.S. or third-party cloud providers.</p>
+        <div class="compliance-badge" data-i18n="badge_verified">VERIFIED</div>
+      </div>
+      <div class="compliance-check">
+        <div class="compliance-check-icon">🧾</div>
+        <h3 data-i18n="gdpr2_h">Consent & audit records</h3>
+        <p data-i18n="gdpr2_p">Built-in consent logging, withdrawal tracking and GDPR-required access logs for every patient interaction.</p>
+        <div class="compliance-badge" data-i18n="badge_audit">AUDIT-READY</div>
+      </div>
+      <div class="compliance-check">
+        <div class="compliance-check-icon">🛡️</div>
+        <h3 data-i18n="gdpr3_h">DPA-ready deployment</h3>
+        <p data-i18n="gdpr3_p">We deploy with DPA compatibility, HTTPS encryption, role-based access controls, and automated backup strategy.</p>
+        <div class="compliance-badge" data-i18n="badge_dpa\">DPA COMPLIANT</div>
+      </div>
     </div>
   </div>
 </section>
@@ -428,6 +531,12 @@ const translations = {
     gdpr1_h: "本地数据主权", gdpr1_p: "患者信息存储在你的欧洲服务器，不传给美国或第三方云服务。",
     gdpr2_h: "同意与审计记录", gdpr2_p: "支持同意记录、撤回跟踪和 GDPR 必要的访问日志。",
     gdpr3_h: "DPA 兼容部署", gdpr3_p: "我们提供 DPA 兼容部署，并配置 HTTPS、访问控制与备份策略。",
+    badge_verified: "已验证", badge_audit: "审计就绪", badge_dpa: "DPA 合规",
+    pkg_starter: "基础套餐", pkg_starter_desc: "适合刚开始自动化的诊所",
+    pkg_standard: "标准套餐", pkg_standard_desc: "最受欢迎：为成长中的诊所提供完整自动化",
+    pkg_premium: "高级套餐", pkg_premium_desc: "企业级：完整定制 + 专属支持",
+    pkg_f1: "自动提醒邮件", pkg_f2: "预约确认", pkg_f3: "基础患者分组", pkg_f4: "高级患者分组", pkg_f5: "健康教育通讯", pkg_f6: "月度报告", pkg_f7: "行为评分和触发", pkg_f8: "自定义工作流", pkg_f9: "HIS/EMR 集成支持", pkg_f10: "专属账户经理",
+    pkg_cta: "了解更多 →",
     footer_desc: "专注于欧洲中小型医疗机构的营销自动化解决方案。基于开源 Mautic，数据主权在你。",
     fl_privacy: "隐私政策", fl_dpa: "数据处理协议（DPA）", fl_about: "关于我们", fl_contact: "联系我们"
   },
@@ -485,7 +594,13 @@ const translations = {
     gdpr_lead: "Mautic is both a marketing tool and a compliance tool. We help you build local workflows that are audit-ready.",
     gdpr1_h: "Local data ownership", gdpr1_p: "Patient information stays on your European server and never goes to U.S. or third-party cloud providers.",
     gdpr2_h: "Consent & audit records", gdpr2_p: "Supports consent logging, withdrawal tracking and GDPR-required access logs.",
-    gdpr3_h: "DPA-ready security", gdpr3_p: "We deploy with DPA compatibility, HTTPS, access controls and backup strategy.",
+    gdpr3_h: "DPA-ready deployment", gdpr3_p: "We deploy with DPA compatibility, HTTPS encryption, role-based access controls, and automated backup strategy.",
+    badge_verified: "VERIFIED", badge_audit: "AUDIT-READY", badge_dpa: "DPA COMPLIANT",
+    pkg_starter: "Starter", pkg_starter_desc: "Perfect for clinics just getting started with automation",
+    pkg_standard: "Standard", pkg_standard_desc: "Most popular: full automation for growing clinics",
+    pkg_premium: "Premium", pkg_premium_desc: "Enterprise: full customization & dedicated support",
+    pkg_f1: "Automated reminder emails", pkg_f2: "SMS & appointment confirmations", pkg_f3: "Basic patient segments", pkg_f4: "Advanced patient segmentation", pkg_f5: "Health education newsletters", pkg_f6: "Monthly performance reports", pkg_f7: "Lead scoring & behavior triggers", pkg_f8: "Custom workflow design", pkg_f9: "HIS/EHR integration support", pkg_f10: "Dedicated account manager",
+    pkg_cta: "Learn more →",
     footer_desc: "Marketing automation for small and mid-size European healthcare practices. Built on open-source Mautic — your data, your control.",
     fl_privacy: "Privacy Policy", fl_dpa: "Data Processing Agreement (DPA)", fl_about: "About us", fl_contact: "Contact"
   },
@@ -523,6 +638,12 @@ const translations = {
     f_submit: "Kostenloses Assessment buchen →", f_success: "✓ Erhalten! Wir melden uns innerhalb von 48 Stunden.",
     f_privacy: "🔒 Ihre Daten werden ausschließlich für diese Beratung verwendet, gemäß DSGVO Art. 6(1).",
     f_alert: "Bitte Name, Praxisname und E-Mail angeben.",
+    badge_verified: "VERIFIZIERT", badge_audit: "AUDIT-BEREIT", badge_dpa: "DSGVO-KONFORM",
+    pkg_starter: "Starter", pkg_starter_desc: "Perfekt für Praxen, die gerade mit Automatisierung beginnen",
+    pkg_standard: "Standard", pkg_standard_desc: "Am beliebtesten: Vollständige Automatisierung für wachsende Praxen",
+    pkg_premium: "Premium", pkg_premium_desc: "Enterprise: vollständige Anpassung & dedizierte Unterstützung",
+    pkg_f1: "Automatisierte Erinnerungs-E-Mails", pkg_f2: "SMS & Terminbestätigungen", pkg_f3: "Grundlegende Patienten-Segmentierung", pkg_f4: "Erweiterte Patienten-Segmentierung", pkg_f5: "Gesundheits-Newsletter", pkg_f6: "Monatliche Leistungsberichte", pkg_f7: "Lead-Scoring & Verhaltensauslöser", pkg_f8: "Benutzerdefinierte Workflow-Gestaltung", pkg_f9: "KIS/EHR-Integrationssupport", pkg_f10: "Dedizierter Account Manager",
+    pkg_cta: "Mehr erfahren →",
     footer_desc: "Marketing-Automatisierung für kleine und mittlere Arztpraxen in Europa. Basierend auf Open-Source Mautic — Ihre Daten, Ihre Kontrolle.",
     fl_privacy: "Datenschutzerklärung", fl_dpa: "Auftragsverarbeitungsvertrag (AVV)", fl_about: "Über uns", fl_contact: "Kontakt"
   },
@@ -560,6 +681,12 @@ const translations = {
     f_submit: "Réserver l'évaluation gratuite →", f_success: "✓ Reçu ! Nous vous contacterons sous 48 heures.",
     f_privacy: "🔒 Vos informations sont utilisées uniquement pour cette consultation, conformément au RGPD Art. 6(1).",
     f_alert: "Veuillez renseigner votre nom, le nom du cabinet et votre e-mail.",
+    badge_verified: "VÉRIFIÉ", badge_audit: "PRÊT POUR AUDIT", badge_dpa: "CONFORME RGPD",
+    pkg_starter: "Démarrage", pkg_starter_desc: "Parfait pour les cabinets commençant l'automatisation",
+    pkg_standard: "Standard", pkg_standard_desc: "Plus populaire : automatisation complète pour cabinets en croissance",
+    pkg_premium: "Premium", pkg_premium_desc: "Entreprise : personnalisation complète & support dédié",
+    pkg_f1: "E-mails de rappel automatisés", pkg_f2: "SMS & confirmations de rendez-vous", pkg_f3: "Segmentation basique des patients", pkg_f4: "Segmentation avancée des patients", pkg_f5: "Bulletins d'éducation sanitaire", pkg_f6: "Rapports de performance mensuels", pkg_f7: "Scoring de leads & déclencheurs comportementaux", pkg_f8: "Conception personnalisée du workflow", pkg_f9: "Support d'intégration DPI/SIH", pkg_f10: "Gestionnaire de compte dédié",
+    pkg_cta: "En savoir plus →",
     footer_desc: "Automatisation marketing pour les petits et moyens cabinets médicaux européens. Basé sur Mautic open source — vos données, votre contrôle.",
     fl_privacy: "Politique de confidentialité", fl_dpa: "Accord de traitement des données (DPA)", fl_about: "À propos", fl_contact: "Contact"
   },
@@ -597,6 +724,12 @@ const translations = {
     f_submit: "Prenota valutazione gratuita →", f_success: "✓ Ricevuto! Ti contatteremo entro 48 ore.",
     f_privacy: "🔒 Le tue informazioni vengono utilizzate solo per questa consulenza, ai sensi del GDPR Art. 6(1).",
     f_alert: "Inserisci nome, nome dello studio ed email.",
+    badge_verified: "VERIFICATO", badge_audit: "PRONTO PER AUDIT", badge_dpa: "CONFORME GDPR",
+    pkg_starter: "Avvio", pkg_starter_desc: "Perfetto per studi che iniziano con l'automazione",
+    pkg_standard: "Standard", pkg_standard_desc: "Più popolare: automazione completa per studi in crescita",
+    pkg_premium: "Premium", pkg_premium_desc: "Enterprise: personalizzazione completa & supporto dedicato",
+    pkg_f1: "Email di promemoria automatizzate", pkg_f2: "SMS & conferme appuntamenti", pkg_f3: "Segmentazione base dei pazienti", pkg_f4: "Segmentazione avanzata dei pazienti", pkg_f5: "Newsletter di educazione sanitaria", pkg_f6: "Rapporti di performance mensili", pkg_f7: "Lead scoring & trigger comportamentali", pkg_f8: "Progettazione di workflow personalizzato", pkg_f9: "Supporto integrazione HIS/EHR", pkg_f10: "Account manager dedicato",
+    pkg_cta: "Scopri di più →",
     footer_desc: "Marketing automation per piccoli e medi studi medici europei. Basato su Mautic open source — i tuoi dati, il tuo controllo.",
     fl_privacy: "Informativa sulla privacy", fl_dpa: "Accordo sul trattamento dei dati (DPA)", fl_about: "Chi siamo", fl_contact: "Contatti"
   },
@@ -634,6 +767,12 @@ const translations = {
     f_submit: "Reservar evaluación gratuita →", f_success: "✓ ¡Recibido! Te contactaremos en 48 horas.",
     f_privacy: "🔒 Tu información se usa únicamente para esta consulta, conforme al RGPD Art. 6(1).",
     f_alert: "Por favor, introduce tu nombre, el nombre de la clínica y tu correo.",
+    badge_verified: "VERIFICADO", badge_audit: "LISTO PARA AUDITORÍA", badge_dpa: "CONFORME RGPD",
+    pkg_starter: "Inicio", pkg_starter_desc: "Perfecto para clínicas que comienzan con automatización",
+    pkg_standard: "Estándar", pkg_standard_desc: "Más popular: automatización completa para clínicas en crecimiento",
+    pkg_premium: "Premium", pkg_premium_desc: "Empresa: personalización completa y soporte dedicado",
+    pkg_f1: "Recordatorios por email automatizados", pkg_f2: "SMS y confirmaciones de cita", pkg_f3: "Segmentación básica de pacientes", pkg_f4: "Segmentación avanzada de pacientes", pkg_f5: "Boletines de educación sanitaria", pkg_f6: "Informes de rendimiento mensuales", pkg_f7: "Puntuación de prospectos y disparadores de comportamiento", pkg_f8: "Diseño de flujo de trabajo personalizado", pkg_f9: "Soporte de integración HIS/EMR", pkg_f10: "Gerente de cuenta dedicado",
+    pkg_cta: "Saber más →",
     footer_desc: "Automatización de marketing para pequeñas y medianas clínicas médicas europeas. Basado en Mautic open source — tus datos, tu control.",
     fl_privacy: "Política de privacidad", fl_dpa: "Acuerdo de tratamiento de datos (DPA)", fl_about: "Sobre nosotros", fl_contact: "Contacto"
   },
@@ -671,6 +810,12 @@ const translations = {
     f_submit: "Zarezerwuj bezpłatną ocenę →", f_success: "✓ Otrzymano! Skontaktujemy się w ciągu 48 godzin.",
     f_privacy: "🔒 Twoje dane są używane wyłącznie do tej konsultacji, zgodnie z RODO Art. 6(1).",
     f_alert: "Proszę podać imię, nazwę przychodni i e-mail.",
+    badge_verified: "ZWERYFIKOWANE", badge_audit: "GOTOWE DO AUDYTU", badge_dpa: "ZGODNE Z RODO",
+    pkg_starter: "Start", pkg_starter_desc: "Idealne dla przychodni zaczynających automatyzację",
+    pkg_standard: "Standard", pkg_standard_desc: "Najpopularniejsze: pełna automatyzacja dla rozwijających się przychodni",
+    pkg_premium: "Premium", pkg_premium_desc: "Enterprise: pełna personalizacja i dedykowane wsparcie",
+    pkg_f1: "Automatyczne e-maile z przypomnieniami", pkg_f2: "SMS i potwierdzenia wizyt", pkg_f3: "Podstawowa segmentacja pacjentów", pkg_f4: "Zaawansowana segmentacja pacjentów", pkg_f5: "Biuletyny edukacji zdrowotnej", pkg_f6: "Miesięczne raporty wydajności", pkg_f7: "Punktacja potencjalnych klientów i wyzwalacze behawioralne", pkg_f8: "Niestandardowy projekt przepływu pracy", pkg_f9: "Wsparcie integracji HIS/EMR", pkg_f10: "Dedykowany menedżer konta",
+    pkg_cta: "Dowiedz się więcej →",
     footer_desc: "Automatyzacja marketingu dla małych i średnich europejskich przychodni medycznych. Oparte na open-source Mautic — Twoje dane, Twoja kontrola.",
     fl_privacy: "Polityka prywatności", fl_dpa: "Umowa powierzenia danych (DPA)", fl_about: "O nas", fl_contact: "Kontakt"
   }
